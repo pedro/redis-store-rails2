@@ -34,16 +34,22 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
     super
     response = @store.del(key)
     response >= 0
+  rescue Errno::ECONNREFUSED => e
+    false
   end
 
   def increment(key, amount = 1)
     return nil unless @store.exists(key)
     @store.incrby key, amount
+  rescue Errno::ECONNREFUSED => e
+    nil
   end
 
   def decrement(key, amount = 1)
     return nil unless @store.exists(key)
     @data.decrby key, amount
+  rescue Errno::ECONNREFUSED => e
+    nil
   end
 
   def clear
