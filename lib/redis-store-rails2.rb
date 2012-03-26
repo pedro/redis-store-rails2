@@ -37,10 +37,12 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
   end
 
   def increment(key, amount = 1)
+    return nil unless @store.exists(key)
     @store.incrby key, amount
   end
 
   def decrement(key, amount = 1)
+    return nil unless @store.exists(key)
     @data.decrby key, amount
   end
 
