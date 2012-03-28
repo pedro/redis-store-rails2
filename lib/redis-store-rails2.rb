@@ -15,7 +15,7 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
     @store = Redis.new(options)
   end
 
-  def read(key, options = nil)
+  def read(key, options = {})
     super
     handle_errors(options) do
       @store.get(key)
