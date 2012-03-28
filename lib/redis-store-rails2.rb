@@ -72,7 +72,7 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
     return yield
   rescue Errno::ECONNREFUSED => e
     logger.error("RedisStoreRails2 error (#{e.class.name}): #{e.message}")
-    raise RedisStoreRails2::Error if options[:raise_errors]
+    raise RedisStoreRails2::Error.new(e.to_s) if options[:raise_errors]
     options[:default_value]
   end
 end
