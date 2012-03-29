@@ -72,7 +72,7 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
     Timeout.timeout(1) do
       return yield
     end
-  rescue Errno::ECONNREFUSED => e
+  rescue Exception => e
     logger.error("RedisStoreRails2 error (#{e.class.name}): #{e.message}")
     raise RedisStoreRails2::Error.new(e.to_s) if options[:raise_errors]
     options[:default_value]
