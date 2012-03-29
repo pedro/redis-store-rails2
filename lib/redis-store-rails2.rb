@@ -42,21 +42,21 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
     end
   end
 
-  def increment(key, amount = 1)
+  def increment(key, amount = 1, options={})
     handle_errors(options) do
       return nil unless store.exists(key)
       store.incrby key, amount
     end
   end
 
-  def decrement(key, amount = 1)
+  def decrement(key, amount = 1, options={})
     handle_errors(options) do
       return nil unless store.exists(key)
       @data.decrby key, amount
     end
   end
 
-  def clear
+  def clear(options={})
     handle_errors(options) do
       store.flushdb
     end
