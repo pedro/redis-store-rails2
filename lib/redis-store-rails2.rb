@@ -28,8 +28,11 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
   def write(key, value, options={})
     super
     handle_errors({ :default_value => false }.merge(options)) do
-      response = store.set(key, value)
-      store.expire(key, options[:expires_in]) if options[:expires_in]
+      response = nil
+      store.multi do |m|
+        response = m.set(key, value)
+        m.expire(key, options[:expires_in]) if options[:expires_in]
+      end
       response == "OK"
     end
   end
