@@ -71,11 +71,13 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
     @store ||= Redis.new(@options)
   end
 
+  class RedisTimeoutError < Exception; end
+
   def handle_errors(options = {})
-    Timeout.timeout(1) do
+    Timeout.timeout(1, RedisTimeoutError) do
       return yield
     end
-  rescue Exception => e
+  rescue RedisTimeoutError, SystemCallError, SocketError, EOFError => e
     logger.error("RedisStoreRails2 error (#{e.class.name}): #{e.message}")
     raise RedisStoreRails2::Error.new(e.to_s) if options[:raise_errors]
     options[:default_value]
