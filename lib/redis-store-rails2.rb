@@ -74,7 +74,7 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
   class RedisTimeoutError < Exception; end
 
   def handle_errors(options = {})
-    Timeout.timeout(1, RedisTimeoutError) do
+    Timeout.timeout(0.2, RedisTimeoutError) do
       return yield
     end
   rescue RedisTimeoutError, SystemCallError, SocketError, EOFError => e
