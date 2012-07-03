@@ -47,8 +47,11 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
 
   def increment(key, amount = 1, options={})
     handle_errors(options) do
-      return nil unless store.exists(key)
-      store.incrby key, amount
+      value = nil
+      store.multi do |m|
+        value = m.incrby(key, amount) if m.exists(key)
+      end
+      value
     end
   end
 
