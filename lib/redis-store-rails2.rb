@@ -53,8 +53,7 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
 
   def decrement(key, amount = 1, options={})
     handle_errors(options) do
-      return nil unless store.exists(key)
-      @data.decrby key, amount
+      store.decrby(key, amount)
     end
   end
 
