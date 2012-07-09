@@ -75,7 +75,7 @@ class RedisStoreRails2 < ActiveSupport::Cache::Store
     Timeout.timeout(0.2, RedisTimeoutError) do
       return yield
     end
-  rescue RedisTimeoutError, SystemCallError, SocketError, EOFError => e
+  rescue Redis::BaseConnectionError => e
     logger.error("RedisStoreRails2 error (#{e.class.name}): #{e.message}")
     raise RedisStoreRails2::Error.new(e.to_s) if options[:raise_errors]
     options[:default_value]
